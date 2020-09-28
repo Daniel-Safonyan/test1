@@ -1,23 +1,38 @@
-package lambdas
+abstract class Pet(var name: String)
 
-typealias Fuckers = Double
+class Cat(name: String): Pet(name)
+class Dog(name: String): Pet(name)
+class Fish(name: String): Pet(name)
 
-fun toConvert(x: Fuckers): Fuckers {
-    return x * 2.2
-}
+class Contest<T: Pet> () {
+    var scores: MutableMap<T, Int> = mutableMapOf()
 
-val conversion: (Fuckers) -> Fuckers = { it * 2.2}
+    fun addScore(t: T, score: Int = 0) {
+        if (score >= 0) scores.put(t, score)
+    }
 
-fun conversionWLambda(x: Fuckers, converter: (Fuckers) -> Fuckers): Fuckers{
-//    val conversionValue = converter(x)
-    return converter(x)
+    fun getWinners(): Set<T> {
+        val highScore = scores.maxBy { it.value }
+        println(highScore?.key?.name)
+        val winners = scores.filter { it.value == highScore?.value }.keys
+
+        winners.forEach { println("Winner: ${it.name}") }
+        return winners
+    }
 }
 
 fun main() {
+    val catContest = Contest<Cat>()
 
-    val elResulto = toConvert(90.0)
-    val segundoResulto = conversionWLambda(80.0, conversion)
+    val cat1 = Cat("Pepep")
+    val cat2 = Cat("Ryuyp")
+    val cat3 = Cat("Fifif")
+    val cat4 = Cat("Fifif")
 
-    println("$elResulto = $segundoResulto")
+    catContest.addScore(cat1, 100)
+    catContest.addScore(cat2, 100)
+    catContest.addScore(cat3, 90)
+    catContest.addScore(cat4, 80)
 
+    catContest.getWinners()
 }
